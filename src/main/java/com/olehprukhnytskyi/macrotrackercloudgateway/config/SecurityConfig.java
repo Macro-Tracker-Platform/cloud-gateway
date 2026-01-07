@@ -24,6 +24,7 @@ public class SecurityConfig {
                 .authorizeExchange(exchanges -> exchanges
                         .pathMatchers(
                                 "/api/auth/**",
+                                "/api/goals/**",
                                 "/api-docs/**",
                                 "/.well-known/jwks.json",
                                 "/swagger-ui/**",
