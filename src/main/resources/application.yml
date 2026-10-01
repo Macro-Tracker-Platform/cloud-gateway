@@ -93,6 +93,26 @@ spring:
                 redis-rate-limiter.burstCapacity: 2
                 redis-rate-limiter.requestedTokens: 1
 
+        # =================== NOTIFICATION SERVICE ===================
+        - id: notification-service
+          uri: ${NOTIFICATION_SERVICE_URL}
+          predicates:
+            - Path=/api/notifications/**
+          filters:
+            - name: RequestRateLimiter
+              args:
+                redis-rate-limiter.keyResolver: "#{@hybridKeyResolver}"
+                redis-rate-limiter.replenishRate: 10
+                redis-rate-limiter.burstCapacity: 20
+                redis-rate-limiter.requestedTokens: 1
+
+        - id: notification-service-swagger
+          uri: ${NOTIFICATION_SERVICE_URL}
+          predicates:
+            - Path=/api-docs/notification-service/**
+          filters:
+            - RewritePath=/api-docs/notification-service, /api-docs
+
         - id: food-service
           uri: ${FOOD_SERVICE_URL}
           predicates:
@@ -216,6 +236,8 @@ springdoc:
         url: /api-docs/bff-service
       - name: food-service
         url: /api-docs/food-service
+      - name: notification-service
+        url: /api-docs/notification-service
     persist-authorization: true
 
 management:
